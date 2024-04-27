@@ -59,10 +59,14 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         }
         KeyCode::Backspace => match &app.active_block {
             ActiveBlock::FileNameInput => {
-                app.file_name_input.pop();
+                if app.edit_mode {
+                    app.file_name_input.pop();
+                }
             }
             ActiveBlock::ReagentOutput => {
-                app.reagent_string.pop();
+                if app.edit_mode {
+                    app.reagent_string.pop();
+                }
             }
         },
         // Other handlers you could add here.
