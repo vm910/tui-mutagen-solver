@@ -1,6 +1,5 @@
 use crate::app::{App, AppResult};
 use crossterm::event::{KeyCode, KeyEvent, KeyModifiers};
-use ratatui::style::{Color, Style};
 
 use crate::app::ActiveBlock;
 
