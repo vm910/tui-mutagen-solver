@@ -1,5 +1,7 @@
 use std::error;
 
+use crate::reagent::Reagent;
+
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -9,6 +11,13 @@ pub enum ActiveBlock {
     ReagentOutput,
 }
 
+#[derive(Debug)]
+pub enum Status {
+    Neutral,
+    Ok,
+    Error,
+}
+
 /// Application.
 #[derive(Debug)]
 pub struct App {
@@ -16,24 +25,34 @@ pub struct App {
     pub running: bool,
     /// Reagent file name
     pub file_name_input: String,
-    /// Reagent string
-    pub reagent_string: String,
     /// Parsed reagents
-    pub reagent_output: String,
+    pub reagents: Vec<Reagent>,
     /// Edit mode
     pub edit_mode: bool,
     /// active block
     pub active_block: ActiveBlock,
+    /// exitus
+    pub exitus: Reagent,
+    /// log message
+    pub log_message: String,
+    /// status
+    pub status: Status,
 }
 
 impl Default for App {
     fn default() -> Self {
         Self {
             running: true,
-            file_name_input: String::new(),
-            reagent_string: String::new(),
-            reagent_output: String::new(),
+            file_name_input: "reagents.txt".to_string(),
+            reagents: Vec::new(),
+            log_message: String::new(),
+            exitus: Reagent {
+                name: "".to_string(),
+                atoms: Vec::new(),
+                score: None,
+            },
             active_block: ActiveBlock::FileNameInput,
+            status: Status::Neutral,
             edit_mode: false,
         }
     }

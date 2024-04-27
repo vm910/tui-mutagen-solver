@@ -12,3 +12,12 @@ pub mod tui;
 
 /// Event handler.
 pub mod handler;
+
+// Reagent module
+pub mod reagent;
+
+// Combinator module
+pub mod combinator;
+
+// Solver module
+pub mod solver;
