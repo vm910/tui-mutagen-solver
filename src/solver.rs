@@ -6,18 +6,21 @@ use std::collections::HashSet;
 
 const MAX_DEPTH: usize = 15;
 
-pub fn filter_useless_reagents(exitus: &Reagent, reagents: &Vec<Reagent>) -> Vec<Reagent> {
+pub fn filter_useless_reagents(
+    exitus: &Reagent,
+    reagents: &Vec<Reagent>,
+) -> (Vec<Reagent>, Vec<Reagent>) {
     let mut prev_len = reagents.len() + 1;
-    let mut reagents = reagents.clone();
+    let mut useful_reagents = reagents.clone();
 
-    while prev_len > reagents.len() {
-        prev_len = reagents.len();
-        let atom_pool: HashSet<String> = reagents
+    while prev_len > useful_reagents.len() {
+        prev_len = useful_reagents.len();
+        let atom_pool: HashSet<String> = useful_reagents
             .iter()
             .flat_map(|r| r.atoms.iter().cloned())
             .collect();
 
-        reagents.retain(|Reagent { atoms, .. }| {
+        useful_reagents.retain(|Reagent { atoms, .. }| {
             atoms.iter().all(|atom| {
                 atom.starts_with('-')
                     || exitus.atoms.contains(atom)
@@ -26,7 +29,13 @@ pub fn filter_useless_reagents(exitus: &Reagent, reagents: &Vec<Reagent>) -> Vec
         });
     }
 
-    reagents
+    let useless_reagents: Vec<Reagent> = reagents
+        .iter()
+        .filter(|r| !useful_reagents.contains(r))
+        .cloned()
+        .collect();
+
+    (useful_reagents, useless_reagents)
 }
 
 fn contains_ordered_slice(sequence: &[String], slice: &[String]) -> bool {

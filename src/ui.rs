@@ -96,9 +96,10 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .block(log_block);
     frame.render_widget(log, reagent_layout[2]);
 
-    let solution_output = Block::default()
+    let solution_output_block = Block::default()
         .title("Solver log")
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded);
+    let solution_output = Paragraph::new(app.solver_log.join("\n")).block(solution_output_block);
     frame.render_widget(solution_output, main_layout[1])
 }

@@ -76,6 +76,24 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 }
             }
         }
+        KeyCode::Char('s') => {
+            if !app.edit_mode {
+                if app.reagents.is_empty() {
+                    app.solver_log.clear();
+                    app.solver_log.push("No reagents loaded".to_string());
+                    return Ok(());
+                } else {
+                    app.find_solutions();
+                }
+            } else {
+                match &app.active_block {
+                    ActiveBlock::FileNameInput => {
+                        app.file_name_input.push('s');
+                    }
+                    ActiveBlock::ReagentOutput => {}
+                }
+            }
+        }
         KeyCode::Char(val) => {
             if app.edit_mode {
                 match &app.active_block {
