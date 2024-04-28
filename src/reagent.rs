@@ -38,6 +38,10 @@ pub fn load_reagents(file_path: &str) -> io::Result<String> {
     Ok(contents)
 }
 
+pub fn validate_reagents(reagents: &Vec<Reagent>) -> bool {
+    false
+}
+
 pub fn parse_reagents(contents: &str) -> (Option<Reagent>, Vec<Reagent>) {
     let mut reagents = Vec::new();
     let mut exitus = None;
