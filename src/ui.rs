@@ -1,7 +1,7 @@
 use ratatui::{
     layout::{Alignment, Constraint, Direction, Layout},
     style::{Color, Style},
-    widgets::{Block, BorderType, Borders, Paragraph},
+    widgets::{Block, BorderType, Borders, Padding, Paragraph},
     Frame,
 };
 
@@ -54,6 +54,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     let reagent_output_block = Block::default()
         .title("Reagents")
         .borders(Borders::ALL)
+        .padding(Padding::uniform(1))
         .border_type(BorderType::Rounded)
         .border_style(match &app.active_block {
             ActiveBlock::ReagentOutput => {
@@ -98,6 +99,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
 
     let solution_output_block = Block::default()
         .title("Solver log")
+        .padding(Padding::uniform(1))
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded);
     let solution_output = Paragraph::new(app.solver_log.join("\n")).block(solution_output_block);

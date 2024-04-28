@@ -111,7 +111,7 @@ impl App {
         }
 
         self.solver_log
-            .push("Finding viable start reagents...".to_string());
+            .push("Looking for viable start reagents...".to_string());
         let viable_starts = get_viable_start_reagents(&self.exitus, &filtered_reagents);
 
         match viable_starts.len() {
@@ -122,7 +122,7 @@ impl App {
             }
             _ => {
                 self.solver_log.push(format!(
-                    " \u{21B3}Viable starts {} \n",
+                    " \u{21B3}Found {} \n",
                     viable_starts
                         .iter()
                         .map(|r| r.name.clone())
@@ -159,8 +159,6 @@ impl App {
         }
 
         drop(sender);
-
-        self.solver_log.push("Done.\n".to_string());
 
         for (start, path_option, duration) in receiver {
             match path_option {
