@@ -45,13 +45,19 @@ pub struct App {
     pub status: Status,
     /// solver log
     pub solver_log: Vec<String>,
+    /// char index
+    pub character_index: usize,
+    /// reagents and exitus
+    pub reagents_and_exitus: String,
 }
 
 impl Default for App {
     fn default() -> Self {
+        let file_name_input = "reagents.txt".to_string();
+
         Self {
             running: true,
-            file_name_input: "reagents.txt".to_string(),
+            file_name_input: file_name_input.clone(),
             reagents: Vec::new(),
             log_message: String::new(),
             exitus: Reagent {
@@ -59,10 +65,12 @@ impl Default for App {
                 atoms: Vec::new(),
                 score: None,
             },
+            reagents_and_exitus: String::new(),
             active_block: ActiveBlock::FileNameInput,
             status: Status::Neutral,
             edit_mode: false,
             solver_log: Vec::new(),
+            character_index: file_name_input.len(),
         }
     }
 }
@@ -83,6 +91,71 @@ impl App {
 
     pub fn switch_active_block(&mut self, active_block: ActiveBlock) {
         self.active_block = active_block;
+    }
+
+    pub fn clamp_cursor(&self, new_cursor_pos: usize) -> usize {
+        new_cursor_pos.clamp(0, self.file_name_input.chars().count())
+    }
+
+    pub fn move_cursor_left(&mut self) {
+        let cursor_moved_left = self.character_index.saturating_sub(1);
+        self.character_index = self.clamp_cursor(cursor_moved_left);
+    }
+
+    pub fn move_cursor_right(&mut self) {
+        let cursor_moved_right = self.character_index.saturating_add(1);
+        self.character_index = self.clamp_cursor(cursor_moved_right);
+    }
+
+    pub fn byte_index(&mut self) -> usize {
+        self.file_name_input
+            .char_indices()
+            .map(|(i, _)| i)
+            .nth(self.character_index)
+            .unwrap_or(self.file_name_input.len())
+    }
+
+    pub fn enter_char(&mut self, new_char: char) {
+        let index = self.byte_index();
+
+        // match self.active_block {
+        //     ActiveBlock::FileNameInput => {
+        //         self.file_name_input.insert(index, new_char);
+        //         self.move_cursor_right();
+        //     }
+        //     ActiveBlock::ReagentOutput => {
+        //         self.reagents_and_exitus.insert(index, new_char);
+        //         self.move_cursor_right();
+        //     }
+        // }
+
+        self.file_name_input.insert(index, new_char);
+        self.move_cursor_right();
+    }
+
+    pub fn delete_char(&mut self) {
+        let is_not_cursor_leftmost = self.character_index != 0;
+        if is_not_cursor_leftmost {
+            // Method "remove" is not used on the saved text for deleting the selected char.
+            // Reason: Using remove on String works on bytes instead of the chars.
+            // Using remove would require special care because of char boundaries.
+
+            let current_index = self.character_index;
+            let from_left_to_current_index = current_index - 1;
+
+            // Getting all characters before the selected character.
+            let before_char_to_delete = self
+                .file_name_input
+                .chars()
+                .take(from_left_to_current_index);
+            // Getting all characters after selected character.
+            let after_char_to_delete = self.file_name_input.chars().skip(current_index);
+
+            // Put all characters together except the selected one.
+            // By leaving the selected one out, it is forgotten and therefore deleted.
+            self.file_name_input = before_char_to_delete.chain(after_char_to_delete).collect();
+            self.move_cursor_left();
+        }
     }
 
     pub fn find_solutions(&mut self) {

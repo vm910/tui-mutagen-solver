@@ -30,6 +30,9 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         )
         .split(main_layout[0]);
 
+    let file_name_input_area = reagent_layout[0];
+    let reagents_input_area = reagent_layout[1];
+
     let file_name_input_block = Block::default()
         .title("Reagents file name")
         .borders(Borders::ALL)
@@ -44,6 +47,32 @@ pub fn render(app: &mut App, frame: &mut Frame) {
             }
             _ => Style::default(),
         });
+
+    match &app.edit_mode {
+        false => {}
+
+        true => {
+            // Make the cursor visible and ask ratatui to put it at the specified coordinates after
+            // rendering
+            #[allow(clippy::cast_possible_truncation)]
+            match &app.active_block {
+                ActiveBlock::FileNameInput => frame.set_cursor(
+                    // Draw the cursor at the current position in the input field.
+                    // This position is can be controlled via the left and right arrow key
+                    file_name_input_area.x + app.character_index as u16 + 1,
+                    // Move one line down, from the border to the input line
+                    1,
+                ),
+                ActiveBlock::ReagentOutput => frame.set_cursor(
+                    // Draw the cursor at the current position in the input field.
+                    // This position is can be controlled via the left and right arrow key
+                    reagents_input_area.x + app.character_index as u16 + 1,
+                    // Move one line down, from the border to the input line
+                    reagents_input_area.y + 1,
+                ),
+            }
+        }
+    }
 
     let file_name_input = Paragraph::new(app.file_name_input.clone())
         .alignment(Alignment::Left)
@@ -68,16 +97,16 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         });
 
     let mut reagents_and_exitus = Vec::new();
-
     reagents_and_exitus.push(app.exitus.clone());
-
     for reagent in &app.reagents {
         reagents_and_exitus.push(reagent.clone());
     }
-
-    let reagents: Vec<String> = reagents_and_exitus.iter().map(|r| r.to_string()).collect();
-
-    let reagents = Paragraph::new(reagents.join("\n"))
+    let reagents_and_exitus = reagents_and_exitus
+        .iter()
+        .map(|r| r.to_string())
+        .collect::<Vec<String>>()
+        .join("\n");
+    let reagents = Paragraph::new(reagents_and_exitus)
         .alignment(Alignment::Left)
         .block(reagent_output_block);
 

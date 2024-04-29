@@ -13,9 +13,13 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
                 app.quit();
             } else {
                 match &app.active_block {
-                    ActiveBlock::FileNameInput => app.file_name_input.push('q'),
+                    ActiveBlock::FileNameInput => {
+                        // app.file_name_input.push('q')
+                        app.enter_char('q')
+                    }
                     ActiveBlock::ReagentOutput => {
                         // app.reagent_string.push('q');
+                        // app.enter_char('q')
                     }
                 }
             }
@@ -28,20 +32,46 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         }
         KeyCode::Up => match &app.active_block {
             ActiveBlock::FileNameInput => {
-                app.switch_active_block(ActiveBlock::ReagentOutput);
+                // app.switch_active_block(ActiveBlock::ReagentOutput);
+                // app.character_index = app.reagents.len();
             }
             ActiveBlock::ReagentOutput => {
-                app.switch_active_block(ActiveBlock::FileNameInput);
+                // app.switch_active_block(ActiveBlock::FileNameInput);
+                // app.character_index = app.file_name_input.len();
             }
         },
         KeyCode::Down => match &app.active_block {
             ActiveBlock::FileNameInput => {
-                app.switch_active_block(ActiveBlock::ReagentOutput);
+                // app.switch_active_block(ActiveBlock::ReagentOutput);
+                // app.character_index = app.reagents.len() - 1;
             }
             ActiveBlock::ReagentOutput => {
-                app.switch_active_block(ActiveBlock::FileNameInput);
+                // app.switch_active_block(ActiveBlock::FileNameInput);
+                // app.character_index = app.file_name_input.len() - 1;
             }
         },
+        KeyCode::Left => {
+            if app.edit_mode {
+                match &app.active_block {
+                    ActiveBlock::FileNameInput => app.move_cursor_left(),
+                    ActiveBlock::ReagentOutput => {
+                        // app.character_index = app.character_index.saturating_sub(1);
+                    }
+                }
+            }
+        }
+        KeyCode::Right => {
+            if app.edit_mode {
+                match &app.active_block {
+                    ActiveBlock::FileNameInput => {
+                        app.move_cursor_right();
+                    }
+                    ActiveBlock::ReagentOutput => {
+                        // app.character_index = app.character_index.saturating_add(1);
+                    }
+                }
+            }
+        }
         KeyCode::Char('r') => {
             if !app.edit_mode {
                 match load_reagents(&app.file_name_input) {
@@ -70,7 +100,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             } else {
                 match &app.active_block {
                     ActiveBlock::FileNameInput => {
-                        app.file_name_input.push('r');
+                        // app.file_name_input.push('r');
+                        app.enter_char('r');
                     }
                     ActiveBlock::ReagentOutput => {}
                 }
@@ -88,7 +119,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             } else {
                 match &app.active_block {
                     ActiveBlock::FileNameInput => {
-                        app.file_name_input.push('s');
+                        // app.file_name_input.push('s');
+                        app.enter_char('s')
                     }
                     ActiveBlock::ReagentOutput => {}
                 }
@@ -98,7 +130,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
             if app.edit_mode {
                 match &app.active_block {
                     ActiveBlock::FileNameInput => {
-                        app.file_name_input.push(val);
+                        // app.file_name_input.push(val);
+                        app.enter_char(val);
                     }
                     ActiveBlock::ReagentOutput => {
                         // app.reagent_string.push(val);
@@ -112,7 +145,8 @@ pub fn handle_key_events(key_event: KeyEvent, app: &mut App) -> AppResult<()> {
         KeyCode::Backspace => match &app.active_block {
             ActiveBlock::FileNameInput => {
                 if app.edit_mode {
-                    app.file_name_input.pop();
+                    // app.file_name_input.pop();
+                    app.delete_char();
                 }
             }
             ActiveBlock::ReagentOutput => {
