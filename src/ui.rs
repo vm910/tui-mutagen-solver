@@ -31,7 +31,6 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .split(main_layout[0]);
 
     let file_name_input_area = reagent_layout[0];
-    let reagents_input_area = reagent_layout[1];
 
     let file_name_input_block = Block::default()
         .title("Reagents file name")
@@ -55,22 +54,13 @@ pub fn render(app: &mut App, frame: &mut Frame) {
             // Make the cursor visible and ask ratatui to put it at the specified coordinates after
             // rendering
             #[allow(clippy::cast_possible_truncation)]
-            match &app.active_block {
-                ActiveBlock::FileNameInput => frame.set_cursor(
-                    // Draw the cursor at the current position in the input field.
-                    // This position is can be controlled via the left and right arrow key
-                    file_name_input_area.x + app.character_index as u16 + 1,
-                    // Move one line down, from the border to the input line
-                    1,
-                ),
-                ActiveBlock::ReagentOutput => frame.set_cursor(
-                    // Draw the cursor at the current position in the input field.
-                    // This position is can be controlled via the left and right arrow key
-                    reagents_input_area.x + app.character_index as u16 + 1,
-                    // Move one line down, from the border to the input line
-                    reagents_input_area.y + 1,
-                ),
-            }
+            frame.set_cursor(
+                // Draw the cursor at the current position in the input field.
+                // This position is can be controlled via the left and right arrow key
+                file_name_input_area.x + app.character_index as u16 + 1,
+                // Move one line down, from the border to the input line
+                1,
+            );
         }
     }
 
