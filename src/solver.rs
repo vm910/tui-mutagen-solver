@@ -8,10 +8,10 @@ const MAX_DEPTH: usize = 15;
 
 pub fn filter_useless_reagents(
     exitus: &Reagent,
-    reagents: &Vec<Reagent>,
+    reagents: &[Reagent],
 ) -> (Vec<Reagent>, Vec<Reagent>) {
     let mut prev_len = reagents.len() + 1;
-    let mut useful_reagents = reagents.clone();
+    let mut useful_reagents = reagents.to_owned();
 
     while prev_len > useful_reagents.len() {
         prev_len = useful_reagents.len();

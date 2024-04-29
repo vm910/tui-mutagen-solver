@@ -35,6 +35,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     let file_name_input_block = Block::default()
         .title("Reagents file name")
         .borders(Borders::ALL)
+        .padding(Padding::horizontal(1))
         .border_type(BorderType::Rounded)
         .border_style(match &app.active_block {
             ActiveBlock::FileNameInput => {
@@ -53,11 +54,10 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         true => {
             // Make the cursor visible and ask ratatui to put it at the specified coordinates after
             // rendering
-            #[allow(clippy::cast_possible_truncation)]
             frame.set_cursor(
                 // Draw the cursor at the current position in the input field.
                 // This position is can be controlled via the left and right arrow key
-                file_name_input_area.x + app.character_index as u16 + 1,
+                file_name_input_area.x + app.character_index as u16 + 2,
                 // Move one line down, from the border to the input line
                 1,
             );
@@ -105,7 +105,9 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     let log_block = Block::default()
         .title("Log")
         .borders(Borders::ALL)
+        .padding(Padding::horizontal(1))
         .border_type(BorderType::Rounded);
+
     let log = Paragraph::new(app.log_message.clone())
         .alignment(Alignment::Left)
         .style(match &app.status {
