@@ -119,7 +119,7 @@ pub fn render(app: &mut App, frame: &mut Frame) {
     frame.render_widget(log, reagent_layout[2]);
 
     let solution_output_block = Block::default()
-        .title("Solver log")
+        .title("Solver log (enter - edit mode toggle, q - quit, s - solve, r - read file)")
         .padding(Padding::uniform(1))
         .borders(Borders::ALL)
         .border_type(BorderType::Rounded);
