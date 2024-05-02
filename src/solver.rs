@@ -111,12 +111,13 @@ pub fn priority_search(
         heuristic(&combinator, exitus, 1),
     );
 
-    combinator.reagent_path.push(start.name.clone());
-
     while !p_queue.is_empty() && i < 2500 {
-        let ((current, prev_name, current_path), _) = p_queue.pop().unwrap();
+        let ((current, prev_name, current_path), _) = match p_queue.pop() {
+            Some(x) => x,
+            None => break,
+        };
 
-        if combinator.reagent_path.len() >= MAX_DEPTH {
+        if current_path.len() >= MAX_DEPTH {
             break;
         }
 
@@ -126,7 +127,7 @@ pub fn priority_search(
             }
 
             combinator.reset(&current, &current_path);
-            let new_sequence = combinator.add_reagent(reagent);
+            combinator.add_reagent(reagent);
 
             if combinator.sequence == exitus.atoms {
                 return Some(combinator.reagent_path.clone());
@@ -135,7 +136,10 @@ pub fn priority_search(
                 let mut new_path = current_path.clone();
                 new_path.push(reagent.name.clone());
 
-                p_queue.push((new_sequence, reagent.name.clone(), new_path), priority);
+                p_queue.push(
+                    (combinator.sequence.clone(), reagent.name.clone(), new_path),
+                    priority,
+                );
             }
         }
 

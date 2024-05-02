@@ -28,7 +28,7 @@ impl std::fmt::Debug for Combinator {
 }
 
 impl Combinator {
-    pub fn add_reagent(&mut self, reagent: &Reagent) -> Vec<String> {
+    pub fn add_reagent(&mut self, reagent: &Reagent) {
         self.reagent_path.push(reagent.name.clone());
 
         for atom in &reagent.atoms {
@@ -38,8 +38,6 @@ impl Combinator {
                 self.sequence.push(atom.clone());
             }
         }
-
-        self.sequence.clone()
     }
 
     pub fn reset(&mut self, base_sequence: &[String], reagent_path: &[String]) {
