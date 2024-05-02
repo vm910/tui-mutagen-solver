@@ -81,10 +81,10 @@ fn heuristic(current: &Combinator, exitus: &Reagent, depth: usize) -> OrderedFlo
     let mut index_c: usize = 0;
 
     for i in 0..current.sequence.len() {
-        if exitus.atoms.len() >= i && current.sequence[i] == exitus.atoms[i - index_c] {
+        if exitus.atoms.len() > i && current.sequence[i] == exitus.atoms[i - index_c] {
             score += 3.0 / depth as f32;
         } else {
-            score -= 1.0 * depth as f32;
+            score -= 0.05 * depth as f32;
             index_c += 1;
         }
     }
