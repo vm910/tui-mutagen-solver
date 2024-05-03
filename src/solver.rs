@@ -84,7 +84,7 @@ fn heuristic(current: &Combinator, exitus: &Reagent, depth: usize) -> OrderedFlo
         if exitus.atoms.len() > i && current.sequence[i] == exitus.atoms[i - index_c] {
             score += 3.0 / depth as f32;
         } else {
-            score -= 0.05 * depth as f32;
+            score -= 0.07 * depth as f32;
             index_c += 1;
         }
     }
