@@ -1,15 +1,14 @@
+use ratatui::backend::CrosstermBackend;
+use ratatui::Terminal;
+use std::io;
 use tui_mutagen_solver::app::{App, AppResult};
 use tui_mutagen_solver::event::{Event, EventHandler};
 use tui_mutagen_solver::handler::handle_key_events;
 use tui_mutagen_solver::tui::Tui;
-use std::io;
-use ratatui::backend::CrosstermBackend;
-use ratatui::Terminal;
 
 fn main() -> AppResult<()> {
     // Create an application.
     let mut app = App::new();
-
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(io::stderr());
     let terminal = Terminal::new(backend)?;

@@ -22,9 +22,9 @@ pub fn render(app: &mut App, frame: &mut Frame) {
         .direction(Direction::Vertical)
         .constraints(
             [
-                Constraint::Percentage(5),
-                Constraint::Percentage(90),
-                Constraint::Percentage(5),
+                Constraint::Length(3),
+                Constraint::Min(1),
+                Constraint::Length(3),
             ]
             .as_ref(),
         )

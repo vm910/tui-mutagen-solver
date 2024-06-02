@@ -118,17 +118,6 @@ impl App {
     pub fn enter_char(&mut self, new_char: char) {
         let index = self.byte_index();
 
-        // match self.active_block {
-        //     ActiveBlock::FileNameInput => {
-        //         self.file_name_input.insert(index, new_char);
-        //         self.move_cursor_right();
-        //     }
-        //     ActiveBlock::ReagentOutput => {
-        //         self.reagents_and_exitus.insert(index, new_char);
-        //         self.move_cursor_right();
-        //     }
-        // }
-
         self.file_name_input.insert(index, new_char);
         self.move_cursor_right();
     }

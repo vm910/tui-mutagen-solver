@@ -78,7 +78,7 @@ pub fn get_viable_start_reagents(exitus: &Reagent, reagents: &[Reagent]) -> Vec<
 
 fn heuristic(current: &Combinator, exitus: &Reagent, depth: usize) -> OrderedFloat<f32> {
     let mut score = 0.0;
-    let mut index_c: usize = 0;
+    let mut index_c = 0;
 
     for i in 0..current.sequence.len() {
         if exitus.atoms.len() > i && current.sequence[i] == exitus.atoms[i - index_c] {
